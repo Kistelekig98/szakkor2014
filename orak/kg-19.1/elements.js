@@ -5,7 +5,7 @@ cloudObject = function(x, y, velocity_x){
 	this.x = x;
 	this.y = y;
 	this.velocity_x = velocity_x;
-	this.alpha = 0.5;
+	this.alpha = 0.9;
 
 	this.img = loadImage("../../game/pictures/mistic_cloud.png"); //mistic_cloud.png
 };
@@ -168,7 +168,7 @@ mushroom=function(){
 	this.y=0;
 	this.x1=750;
 	this.x=this.x0;
-	this.speed=1;
+	this.speed=2;
 	this.width=40;
 	this.height=40;
 	this.img = loadImage("gomba.png");
@@ -210,18 +210,31 @@ mushroom.prototype.draw=function(context,t){
 };
 
 //=============================================
-//       coin
+//				coin
 
 coin=function(x, y){
-	this.x = x;
-	this.y = y;
-	this.width=40;
+	this.x_orig = x;
+	this.x1 = x;
+	this.x2 = x + 40;
+	this.y = this.y_orig = y;
+	this.width_orig=40;
 	this.height=40;
 	this.img = loadImage("coin.png");
+	this.img_mirror=loadImage("coin_m.png");
+	this.t=0;
+	this.period= (2*Math.PI)*2;
 	//player.addCollisionCheck(this);
 };
 
 coin.prototype.logic = function(){
+	this.x1 = (this.x_orig+this.width_orig)/2 + (this.width_orig/2) * Math.cos((this.t/this.period)+Math.PI);
+	this.x2 = (this.x_orig+this.width_orig)/2 + (this.width_orig/2) * Math.cos(this.t/this.period);
+	this.x=Math.min(this.x1,this.x2);
+	this.width=Math.abs(this.x1-this.x2);
+	this.t++;
+	if(this.t/this.period>2*Math.PI){
+		this.t=0;
+	}
 };
 
 coin.prototype.collide = function(p){
@@ -236,8 +249,13 @@ coin.prototype.death = function(){
 }
 
 coin.prototype.draw = function(context,t){
-	context.drawImage(this.img,
-		 t.tX(this.x), t.tY(this.y)-this.height);
+	if(this.x1>this.x2){
+		context.drawImage(this.img_mirror,
+		 t.tX(this.x), t.tY(this.y)-this.height, this.width, this.height);
+	}else{
+		context.drawImage(this.img,
+		 t.tX(this.x), t.tY(this.y)-this.height, this.width, this.height);
+	}
 };
 
 //=============================================
@@ -271,4 +289,33 @@ potion.prototype.death = function(){
 potion.prototype.draw = function(context,t){
 	context.drawImage(this.img,
 		 t.tX(this.x), t.tY(this.y));
+};
+
+//===============================================
+//					Animated Bird
+
+anim_bird = function(x, y, velocity_x){
+	this.x = x;
+	this.y = y+140;
+	this.velocity_x = velocity_x;
+
+	this.img = [loadImage("bird1g.gif"), loadImage("bird2g.gif"), loadImage("bird3g.gif"), loadImage("bird4g.gif"), loadImage("bird5g.gif")];
+
+};
+
+anim_bird.prototype.logic = function(){
+
+	this.x += this.velocity_x;
+	if(this.x < -300){
+		this.x = 1400;
+	}
+	
+	var index = (Math.floor(-this.x/5)%5+5)%5;
+
+this.currentImg = this.img [index];			//floor=egészrész
+
+};
+
+anim_bird.prototype.draw=function(context, t){
+	context.drawImage(this.currentImg, t.tX(this.x), t.tY(this.y));
 };

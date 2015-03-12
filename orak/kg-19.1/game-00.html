@@ -1,32 +1,64 @@
 
-<meta charset="UTF-8">
-<div id="menu">
-<button id="gameButton"
-onclick="getElementById('game').style.display='block';getElementById('sources').style.display='none'"
->Game</button>
-<button id="sourceButton"
-onclick="getElementById('game').style.display='none'; getElementById('sources').style.display='block'">Sources</button>
-</div>
-<div id="game" style="display:block;">
-<canvas id="mycanvas" width='600' height ='300'></canvas>
-</div>
-<div id="sources" style="display:none;">
-Ez az első HTML+JS programunk.
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Szakköri játék</title>
+	<link rel="stylesheet" style="css" href="game.css">
+</head>
+<body id="body">
 
-Sounds used:
-<br/>
-Title: Bomb<br/>
-Uploaded: 12.04.09 | License: Attribution 3.0 | Recorded by Mike Koenig <a href="http://soundbible.com/1234-Bomb.html">source</a> <a href="https://creativecommons.org/licenses/by/3.0/">license</a>
-</div>
-<script>
-function loadImage(src){
+	<div id="menu">
+		<button id="btn_game" onclick="Game()">Játék</button>
+		<button id="btn_sources" onclick="Sources()">Források</button>
+		<button id="btn_help" onclick="Help()">Segítség</button>
+	</div>
+
+	<div id="canvas">
+		<canvas id="mycanvas" width='600' height ='300'></canvas> <br/>
+	</div>
+
+	<div id="sources" style="display:none">
+		<p>Ez az első HTML+JS programunk.</p>
+		Sounds used:
+		<br/>
+		Title: Bomb<br/>
+		Uploaded: 12.04.09 | License: Attribution 3.0 | Recorded by Mike Koenig | <a href="http://soundbible.com/1234-Bomb.html" target="blank">source</a> | <a href="https://creativecommons.org/licenses/by/3.0/" target="blank">license</a>
+	</div>
+
+	<div id="help" style="display:none">
+		<img src="../../game/pictures/help.jpg" width="60%">
+	</div>
+
+	<br> <a href="../index.html" title="Vissza a főoldalra"><i><font color="blue"> Vissza a főoldalra </font></i></a>
+
+<script>								//#guggolva nem lehet ugrani  #crouch_left  #gomba respawn  #tüske guggolva
+function loadImage(src){				//terv: "you died" felirat; egyéb design elemek;
 	var image = new Image();
 	image.src = "../../game/pictures/"+src;
 	return image;
 }
-function loadSound(src)
-{
+function loadSound(src){
 	return new Audio("../../game/sounds/"+src);
+}
+
+function Sources(){
+	document.getElementById("canvas").style.display = "none";
+	document.getElementById("sources").style.display = "block";
+	document.getElementById("help").style.display = "none";
+	document.getElementById("body").style.background = "#00ff00";
+}
+function Game(){
+	document.getElementById("canvas").style.display = "block";
+	document.getElementById("sources").style.display = "none";
+	document.getElementById("help").style.display = "none";
+	document.getElementById("body").style.background = "gold";
+}
+function Help(){
+	document.getElementById("help").style.display = "block";
+	document.getElementById("canvas").style.display = "none";
+	document.getElementById("sources").style.display = "none";
+	document.getElementById("body").style.background = "#00ff00";	
 }
 </script>
 
@@ -42,7 +74,7 @@ const KEY_UP=38;
 	
 const PlatformWidth = 80;
 const PlatformHeight = 80;
-background_color = '#85C2FF';///'#85D6FF';
+background_color = '#1E90FF';///'#85D6FF';
 
 
 keyup = function(e){
@@ -72,8 +104,8 @@ function initialize (){
 	
 	player = new avatar(0/*canvas.width/2*/);
 	
-	for(var i=0; i<5 ; i++){
-		elements.push(new cloudObject(Math.random()*600,Math.random()*(300), Math.random()));
+	for(var i=0; i<7 ; i++){
+		elements.push(new cloudObject(Math.random()*600-400,Math.random()*(200)+150, Math.random()));
 	}
 	
 	/*
@@ -93,6 +125,11 @@ function initialize (){
 	elements.push(new mushroom());
 
 	elements.push(new thing(0,0, 10, "bck_tree"));
+
+	elements.push(new anim_bird(Math.random()*300, Math.random()*250, -0.8));
+	elements.push(new anim_bird(Math.random()*300, Math.random()*250, -0.8));
+	elements.push(new anim_bird(Math.random()*300, Math.random()*250, -0.8));
+	elements.push(new anim_bird(Math.random()*300, Math.random()*250, -0.8));
 	
 	elements.push(player);
 	
@@ -182,4 +219,5 @@ window.addEventListener("load", function(){
 });
 </script>
 
-
+</body>
+</html>

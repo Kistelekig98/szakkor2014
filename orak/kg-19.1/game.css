@@ -1,0 +1,29 @@
+*{
+	text-decoration: none;
+	font-family: Arial black;
+}
+
+a{
+	color: blue;
+}
+
+body{
+	background: gold;
+}
+
+#menu{
+	margin-bottom: 10px;
+}
+
+#menu button{
+	background: skyblue;
+	border: 1px solid black;
+	padding: 3px 7px;
+	border-radius: 5px;
+	box-shadow: 5px 5px 5px orange;
+	color: darkblue;
+}
+
+#menu button:hover{
+	cursor: pointer;
+}
